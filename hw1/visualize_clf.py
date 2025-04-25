@@ -1,7 +1,9 @@
 def visualize_clf(clf, X, Y, title, xlabel, ylabel, marker_size=50, grid_length=300, linewidths=None):
     import matplotlib.pyplot as plt
     import pandas as pd
+    import numpy as np
     from matplotlib.colors import ListedColormap
+    import seaborn as sns
 
     if isinstance(X, pd.DataFrame):
         X = X.to_numpy()
