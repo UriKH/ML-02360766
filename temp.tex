@@ -1,0 +1,291 @@
+%\title{Hebrew document in WriteLatex - מסמך בעברית}
+\documentclass{article}
+\usepackage{amsmath, amssymb}
+\usepackage{mathtools, nccmath}
+\usepackage[utf8x]{inputenc}
+\usepackage{centernot}          % for "not" on symbols
+\usepackage{graphicx}
+\usepackage{textcase}
+\usepackage{subcaption} % load 'caption' automatically
+\usepackage[english, hebrew]{babel}
+\selectlanguage{hebrew}
+\usepackage[top=2cm,bottom=2cm,left=2.5cm,right=2cm]{geometry}
+
+\graphicspath{ {./images/} }
+
+\usepackage{fixmath}    % for bold math symbols
+\usepackage{siunitx}
+\usepackage[explicit]{titlesec}
+
+% Math utility and parentheses
+\newcommand{\eqdef}{\mathrm{:=}}
+\newcommand{\ceil}[1]{\left\lceil{#1}\right\rceil }     % ceil
+\newcommand{\floor}[1]{\left\lfloor{#1}\right\rfloor}   % floor
+\newcommand{\curly}[1]{\left\{{#1}\right\}}             % curly
+\newcommand{\angular}[1]{\left\langle{#1}\right\rangle} % angle brackets
+\newcommand{\rect}[1]{\left[{#1}\right]}                % rectangular
+\newcommand{\p}[1]{\left({#1}\right)}                   % matching height brackets
+\newcommand{\vll}[1]{\left|{#1}\right|}
+\newcommand{\vl}[2]{\left.{#1}\right|{#2}}
+\newcommand{\bb}[1]{\mathbb{#1}}                        % for number groups
+\newcommand{\modulo}[3]{{#1}\equiv{#2}\;{\p{\mathrm{mod}\;{#3}}}} % modulo computation
+\newcommand{\eps}{\varepsilon}
+\newcommand{\fra}[2]{\p{\frac{#1}{#2}}}                 % fraction with parenthesis
+\newcommand{\dl}[1]{\left. {{#1}} \right|}               % add long | delim
+
+% complexity notation
+\newcommand{\Oof}[1]{O\p{{#1}}}                     
+\newcommand{\oof}[1]{o\p{{#1}}}
+\newcommand{\tof}[1]{\Theta\p{{#1}}}
+\newcommand{\Omof}[1]{\Omega\p{{#1}}}
+\newcommand{\omof}[1]{\omega\p{{#1}}}
+
+% probability notations
+\newcommand{\cond}[2]{P\p{{#1}|{#2}}}       % conditional probability
+\newcommand{\prob}[1]{P\p{{#1}}}            % probability notation
+\newcommand{\bayes}[2]{\frac{P\p{{#2}|{#1}} \cdot P\p{#1}}{P\p{{#2}}}} % bayes formula
+\newcommand{\E}[1]{\bb{E}\rect{{#1}}}       % expected value
+\newcommand{\EE}[1]{\E{\E{#1}}}             % E[E[]]
+\newcommand{\V}[1]{\mathrm{Var}\p{{#1}}}    % variance
+\newcommand{\C}[1]{\mathrm{Cov}\p{{#1}}}    % covariance
+
+% Formatting utility
+\newcommand{\n}{\newline}                       % new line
+\newcommand{\vtab}{\vspace{1em}\noindent}       % vertical space
+\newcommand{\ds}{\textendash\;}                 % dash with space
+\newcommand{\mds}{\textendash}                  % math dash without space
+\newcommand{\question}[1]{\section*{שאלה {#1}}}
+\newcommand{\nquestion}[1]{\newpage\section*{שאלה {#1}}}
+\newcommand{\subsec}[1]{\subsection*{סעיף {#1}'}}
+\newcommand{\smm}[2]{\sum_{#1}^{#2}}
+\newcommand{\sm}[1]{\sum_{#1}}
+\newcommand{\txt}[1]{\mathrm{#1}}
+\newcommand{\bd}[1]{\mathbf{#1}}
+
+% Qantum physics
+\DeclarePairedDelimiter\bra{\langle}{\rvert}
+\DeclarePairedDelimiter\ket{\lvert}{\rangle}
+\DeclarePairedDelimiterX\bk[2]{\langle}{\rangle}{#1\,\delimsize\vert\,\mathopen{}#2}
+\DeclarePairedDelimiterX\bkt[3]{\langle}{\rangle}{#1\,\delimsize\vert\,#2\,\delimsize\vert\,\mathopen{}#3}
+\newcommand{\A}{\textup{\AA}}
+\newcommand{\um}[1]{~\rect{\txt{#1}}}
+\newcommand{\st}[2]{{#1}_{\txt{#2}}}
+\newcommand{\e}[1]{\times 10^{#1}}
+\newcommand{\op}[1]{\hat{#1}}       % hat symbol for operators
+\newcommand{\ct}[1]{{#1}^\dag}      % complex transpose
+
+% constants
+\newcommand{\h}{6.626\e{-34}}       % Plank's constant Js
+\newcommand{\rh}{1.054\e{-34}}      % reduced Plank's constant Js
+\newcommand{\sol}{3\e{8}}           % speed of light m/s
+\newcommand{\ec}{1.602\e{-19}}      % electron charge C
+\newcommand{\ecom}{\e{-19}}         % electron charge order of magnitude
+\newcommand{\emass}{9.109\e{-31}}   % electron mass
+\newcommand{\centi}{\e{-2}}
+\newcommand{\milli}{\e{-3}}
+\newcommand{\micro}{\e{-6}}
+\newcommand{\nano}{\e{-9}}
+\newcommand{\expt}{\e{-10}}
+\newcommand{\pico}{\e{-12}}
+
+% Linear algebra
+\usepackage{amsmath}
+\usepackage{xparse}
+\usepackage{expl3}
+\ExplSyntaxOn
+% one temporary token list
+\tl_new:N \l__mymatrix_tl
+\RenewDocumentCommand{\vec}{m}{ \begin{pmatrix} \clist_use:nn { #1 } { \\ } \end{pmatrix}}      % columns vector
+\NewDocumentCommand{\rvec}{m}{ \begin{pmatrix} \clist_use:nn { #1 } { & } \end{pmatrix}}        % row vector
+\NewDocumentCommand{\tvec}{m}{ \begin{pmatrix} \clist_use:nn { #1 } { \\ } \end{pmatrix}^\top}  % transposed columns vector
+\NewDocumentCommand{\rtvec}{m}{ \begin{pmatrix} \clist_use:nn { #1 } { & } \end{pmatrix}^\top } % transposed row vector
+% — Matrix via regex replacement —
+\RenewDocumentCommand{\matrix}{m}{ \begin{pmatrix}
+    \tl_set:Nn \l__mymatrix_tl { #1 }                               % 1. load input into a token list
+    \regex_replace_all:nnN { \s*;\s* } { \c{\\} } \l__mymatrix_tl   % 2. normalize: remove spaces around ; and ,
+    \regex_replace_all:nnN { \s*,\s* } { & } \l__mymatrix_tl
+    \tl_use:N \l__mymatrix_tl                                       % 3. typeset the result
+\end{pmatrix}}
+\ExplSyntaxOff
+
+
+\begin{document}
+
+
+\begingroup
+    \centering
+    \LARGE פיזיקה קוונטית להנדסה\\
+    \Large תרגיל בית יבש 2 \\[1 em]
+    \large \today\\[0.5em]
+    \large אורי כשר חיטין \par
+    \large \L{215105321} \par
+\endgroup
+\rule{\textwidth}{0.4pt}
+
+\section*{אורך גל דה ברויי ועקרון אי הוודאות}
+\subsection*{סעיף א'}
+במהלך חישוב אורך גל דה ברויי, על מנת לברר האם צריך להשתמש בנוסחאות המכניקה הקלאסית או בנוסחאות תורת היחסות הפרטית עלינו לברר האם מתקיים: $E_{\text{\L{rest}}} \gg E_k$ \ds שכן ראינו כי תנאי זה מתקיים עבור מהירויות לא יחסותיות.\n
+
+\vtab
+בהתאם לאינווריאנט לורנץ האנרגיה הכוללת של החלקיק הינה:
+\[
+    E^2=p^2c^2+m^2c^4 \Rightarrow E = \sqrt{p^2c^2+m^2c^4}
+\]
+מהצד השני: 
+\[
+    E_{\text{\L{total}}}=E_0+E_k \Rightarrow E_k = E - E_0
+\]
+כמו כן, אנרגיית המנוחה של חלקיק הינה: $E_0 = mc^2$\n
+לפיכך נקבל:
+\[
+    E_k = \sqrt{p^2c^2+m^2c^4} - mc^2 = \sqrt{p^2c^2+\p{mc^2}^2} - mc^2
+\]
+נרצה לבטל את חלקו של $mc^2$ בביטוי האנרגיה ולקבל את הקירוב הקלאסי:
+\[
+    E_k = \sqrt{p^2c^2+\p{mc^2}^2} - mc^2 = mc^2\sqrt{\frac{p^2}{m^2c^2}+1}-mc^2
+\]
+נשים לב כי עבור הקירוב $\frac{p^2}{m^2c^2} \ll 1$ נוכל לבצע קירוב טיילור מסדר ראשון לשורש:
+\begin{gather*}
+    f(x)=\sqrt{1+x},~ f(0) = 1, ~f'(0)=\frac{1}{2} \Rightarrow f\p{\frac{p^2}{m^2c^2}} = 1+\frac{1}{2}\frac{p^2}{m^2c^2}
+\end{gather*}
+עבור הקירוב לעיל נקבל את הקירוב הקלאסי:
+\[
+    E_k \approx mc^2\p{1+\frac{1}{2}\frac{p^2}{m^2c^2}}-mc^2=\frac{p^2}{2m}
+\]
+אם מתקיים התנאי נוכל להשתמש באנרגיה שמצאנו על מנת לברר את קיום התנאי שהצגנו עבור שימוש בנוחסאות הקלאסיות:
+\[
+    \frac{1}{2}\frac{p^2}{m^2c^2} = \frac{\frac{p^2}{2m}}{mc^2} = \frac{E_k}{E_0} \ll 1 \Rightarrow E_k \ll E_0
+\]
+
+\subsection*{סעיף ב'}
+נתון: $\Delta E_k = 0.01 E_k, ~E_k=10\um{eV}$\n
+
+\vtab
+ראשית נבדוק האם תנועת האלקטרון דורשת שימוש במשוואות יחסות פרטית.
+נשים לב כי האנגריה הקינטית של האלקטרון קטנה מאוד ביחס לאנרגיית המנוחה שלו: $E_0 = 8.1981\e{-14}\um{J}=0.512 \um{MeV}$\n
+מכאן נסיק כי תנועת האלקטרון אינה יחסותית. \n
+
+\vtab
+לפי עקרון אי הוודאות במיקום ובתנע מתקיים: 
+\[
+    \Delta p\Delta x \ge \frac{\hbar}{2} \Rightarrow \Delta x \ge \frac{\hbar}{2\Delta p}
+\]
+נקבל מינימום עבור $\Delta x$ כאשר יתקיים שוויון:
+\[
+    \Delta x_{\min} = \frac{\hbar}{2\Delta p}
+\]
+הקשר בין התנע והאנרגיה הקינטית נתון על ידי: $E_k=\frac{p^2}{2m}$\n
+נשתמש בקשר זה ונקבל ונמצא את הקשר בין אי הוודאות במיקום לאי הוודאות באנרגיה:
+\begin{gather*}
+    p = \sqrt{2mE_k} \\
+    dp = \sqrt{2m}\frac{dE_k}{2\sqrt{E_k}} = \sqrt{\frac{m}{2E_k}}dE_k \Rightarrow \Delta p = \sqrt{\frac{m}{2E_k}}\Delta E_k
+    \\
+    \Delta x \ge \frac{\hbar}{2\Delta p} = \frac{\hbar}{2\sqrt{\frac{m}{2E_k}} \Delta E_k} = \frac{\hbar}{\Delta E_k}\sqrt{\frac{E_k}{2m}}
+\end{gather*}
+נציב:
+\[
+    \Delta x_{\min} = \frac{\hbar}{\Delta E_k}\sqrt{\frac{E_k}{2m}} = \frac{\rh}{0.01 \times (10 \times \ec)}\sqrt{\frac{10 \times \ec}{2\times \emass}}=6.169 \e{-9} = 61.69 \um{\A}
+\]
+
+\subsection*{סעיף ג'}
+כעת האלקטרון בעל אנגריה קינטית $E_K = 5\um{MeV}$ ולכן כעת לא מתקיים $E_k \ll E_0$. פירוש הדבר הוא שכעת עלינו לבצע חישוב בעזרת משוואות היחסות הפרטית.
+\n
+
+\vtab
+כעת בשונה מהסעיף הקודם נשתמש בקשר בין אנרגיה ותנע הנתון על ידי אינווריאנט לורנץ:
+\begin{align*}
+    E^2 &= \p{E_0 + E_k}^2 = p^2c^2 + \p{mc^2}^2 \\ 
+    &\Rightarrow p^2c^2 = (E_0+E_k)^2 + E_0^2 \\
+    & \Rightarrow p = \frac{1}{c}\sqrt{(E_0+E_k)^2 + E_0^2}
+\end{align*}
+נמצא את קשר אי הוודאות בין תנע ואנרגיה:
+\begin{gather*}
+    dp = \frac{1}{2c}\p{\p{E_0+E_k}^2 + E_0^2}^{-\frac{1}{2}}\p{2E_k + 2E_0}dE_k = \frac{E_k+E_0}{c\sqrt{(E_0+E_k)^2 + E_0^2}}dE_k \\
+    \Delta p = \frac{E_k+E_0}{c\sqrt{(E_0+E_k)^2 + E_0^2}}\Delta E_k \\
+    \Delta x \ge \frac{\hbar}{2\Delta p} = \frac{\hbar c \sqrt{(E_0+E_k)^2 + E_0^2}}{2\p{E_k+E_0}\Delta E_k}
+\end{gather*}
+נציב: 
+\[
+     \Delta x_{\min} =  \frac{\hbar c \sqrt{(E_0+E_k)^2 + E_0^2}}{2\p{E_k+E_0}\Delta E_k} = 
+     \frac{\rh \times \sol \times \sqrt{\p{\emass \times \p{\sol}^2 + 10 \times \ec }^2 + \p{\emass \times \p{\sol}^2}}}{2\p{\emass \times \p{\sol}^2 + 10 \times \ec }\times 0.01 \times \p{10 \times \ec} } = 
+     0.0165 \um[\A]
+\]
+
+\subsection*{סעיף ד'}
+נתון חלקיק לא יחסותי בעל מסה המבצע תנועה סביב $X=0$ כאשר האנרגיה הפוטנציאלית שלו נתונה לפי: $U=\frac{1}{2}m\omega^2 x^2, ~\omega = \sqrt{\frac{k}{m}}$\n
+
+\vtab
+מכאן שהאנרגיה הכוללת של החלקיק הינה:
+\[
+    E = \underbrace{\frac{p^2}{2m}}_{E_k} + \underbrace{\frac{1}{2}m\omega^2 x^2}_{U}
+\]
+אנו מחפשים $\angular{E}$ אשר נתונה לפי המשוואה:
+\[
+    \angular{E} = \angular{\frac{p^2}{2m}} + \angular{\frac{1}{2}m\omega^2 x^2} = \frac{\angular{p^2}}{2m} + \frac{1}{2}m\omega^2 \angular{x^2}
+\]
+נכונות המעבר נובעת מכך שפרט לגדלים $E,~x,~p$ יתר האיברים קבועים.\n
+
+\vtab
+נזכור כי ברצוננו למצוא ביטוי עבור ממוצע האנרגיה כפונקציה של אי הוודאות של $x$. לפיכך נשתמש בקשרים המוכרים עבור אי הוודאות:
+\begin{gather*}
+    \p{\Delta x}^2 = \angular{x^2}-\angular{x}^2 \\
+    \p{\Delta p}^2 = \angular{p^2}-\angular{p}^2 \\
+\end{gather*}
+מכיוון שהתנועת החלקיק היא תנועה פשוטה סביב נקודה מסויימת, בפרט $x=0$, נקבל כי $\angular{x}=0, ~\angular{p}=0$.
+לכן:
+\[
+    \p{\Delta x}^2 = \angular{x^2} \qquad \p{\Delta p}^2 = \angular{p^2}
+\]
+
+כעת מעקרון אי הוודאות עבור התנע והמיקום:
+\[
+    \Delta x \Delta p \ge \frac{\hbar}{2} \Rightarrow \Delta p \ge \frac{\hbar}{2\Delta x}
+\]
+נציב את כל הביטויים שמצאנו בביטוי האנרגיה הממוצעת ונקבל:
+\begin{align*}
+    \angular{E} &= \frac{\angular{p^2}}{2m} + \frac{1}{2}m\omega^2 \angular{x^2} = \frac{\p{\Delta p}^2}{2m} + \frac{1}{2}m\omega^2 \p{\Delta x}^2 \\
+    & = \frac{\p{\Delta p}^2}{2m} + \frac{1}{2}m\omega^2 \p{\Delta x}^2 \ge \frac{\fra{\hbar}{2\Delta x}^2}{2m} + \frac{1}{2}m\omega^2 \p{\Delta x}^2 =
+    \boxed{\frac{\hbar^2}{8m\p{\Delta x}^2} + \frac{1}{2}m\omega^2 \p{\Delta x}^2}
+\end{align*}
+נשים לב כי אם נחשב עבור אי וודאות מינימלית בתנע נקבל שוויון.
+
+\subsection*{סעיף ה'}
+נחפש את האנרגיה הממוצעת המינימלית של החלקיק. נעשה זאת על ידי גזירת פונקציית האנרגיה וחישוב נקודת המינימום. \n
+
+\vtab
+\begin{gather*}
+    \frac{d\angular{E}}{d\p{\Delta x}} = -\frac{\hbar^2}{4m\p{\Delta x}^3} + m\omega^2 \Delta x \\
+    \frac{d\angular{E}}{d\p{\Delta x}} = 0 \Rightarrow m\omega^2 \Delta x = \frac{\hbar^2}{4m\p{\Delta x}^3} 
+    \Rightarrow \p{\Delta x}^4 = \frac{\hbar^2}{2m^2\omega^2} \Rightarrow \Delta x = \sqrt{\frac{\hbar}{2m\omega}}
+\end{gather*}
+מצאנו את ערך ה\ds$\Delta x$ היחיד עבורו הנגזרת מתאפסת. זהו גם הערך המתאים עבור האנרגיה הממוצעת המינימאלית.\n
+נציב ערך זה ב\ds$\angular{E}\p{\Delta x}$ ונקבל את $\angular{E}_{\min}$.
+\[
+    \angular{E} = \boxed{\frac{\hbar^2}{8m\p{\sqrt{\frac{\hbar}{2m\omega}}}^2} + \frac{1}{2}m\omega^2 \p{\sqrt{\frac{\hbar}{2m\omega}}}^2} 
+    = \frac{\hbar \omega}{4} + \frac{\hbar \omega}{4} = \boxed{\frac{\hbar \omega}{2}}
+\]
+
+\section{הולכה חשמלית ואורך גל דה ברויי}
+\subsection*{סעיף א'}
+נתונה התפלגות מהירויות חלקיקים חופשיים לא יחסותיים: 
+\[
+    f(v)d^3v = \frac{m}{2\pi k_B T}^\frac{3}{2} \cdot e^{-\frac{mv^2}{2k_BT}}d^3v
+\]
+ראשית נמצא את $f(v)$ בעזרת הרמז ונוסחאת העזר:
+\begin{gather*}
+    f(v) d^3v = f(v)\cdot v^2 \sin{\theta} dv d\theta d\Phi \\
+    \Downarrow\\
+    \int_0^{2\pi}\int_0^{\pi} f(v)v^2 \sin{\theta} d\theta d\Phi = \int_0^{2\pi} d\Phi \int_{0}^{\pi} \sin{\theta}d\theta = 2\pi \cdot 2 = 4\pi
+    \\
+    f(v)dv = 4\pi v^2 = 4\pi v^2 \frac{m}{2\pi k_B T}^\frac{3}{2} \cdot e^{-\frac{mv^2}{2k_BT}}dv
+    \\
+\end{gather*}
+
+נשים לב כי התנע הממוצע מקיים: $\angular{p} = \angular{mv} = m \angular{v}$\n
+נחשב את המהירות הממוצעת בהתאם להתפלגות $f(v)$:
+\begin{align*}
+    \int_0^\infty vf(v)dv = \int_0^\infty 4\pi 4\pi v^3 \frac{m}{2\pi k_B T}^\frac{3}{2} \cdot e^{-\frac{mv^2}{2k_BT}}dv =
+    4\pi \p{\frac{m}{2\pi k_B T}}^\frac{3}{2} \int_0^\infty v^3 e^{-\p{\frac{m}{2k_B T}}v^2}dv \underbrace{=}_{\text{\L{hint}}} \frac{1}{2\p{\frac{m}{2k_B T}}^2}
+\end{align*}
+
+\end{document}
