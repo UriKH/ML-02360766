@@ -1,3 +1,4 @@
 /.idea
-/wet_hw2/__pycache
-/wet_hw1/__pycache
+/wet_hw2/__pycache__
+/wet_hw1/__pycache__
+*/__pycache__

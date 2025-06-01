@@ -39,7 +39,7 @@ def compare_gradients(X, y, deltas, C=1, REPEATS=100, figsize=(10, 6)):
 
     plt.figure(figsize=figsize)
     plt.title('Residuals of analytical and numerical gradients', fontsize=22)
-    plt.plot(deltas, residual_means, linewidth=3)      
+    plt.plot(deltas, residual_means, linewidth=3)
     plt.yscale('log')
     plt.xscale('log')
     plt.xlabel('$\delta$', fontsize=18)
