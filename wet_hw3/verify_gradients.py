@@ -45,10 +45,6 @@ def compare_gradients(X, y, deltas, C=1, REPEATS=10, figsize=(10, 6)):
         residual_means_w.append(np.mean(residuals_w))
         residual_means_b.append(np.mean(residuals_b))
 
-    print("deltas:", deltas)
-    print("residual_means_w:", residual_means_w)
-    print("residual_means_b:", residual_means_b)
-
     fig, axs = plt.subplots(nrows=1, ncols=2, sharey=True, figsize=(16, 8))
     plt.suptitle('Residuals of analytical and numerical gradients',
                  fontsize=22, fontweight="bold")
