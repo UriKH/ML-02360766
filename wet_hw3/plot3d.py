@@ -1,3 +1,7 @@
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+
 def plot3d(df, colX:str, colY:str, colZ:str, title:str, predictions=None):
   fig = plt.figure(figsize=(20, 7))
   axes = [fig.add_subplot(1, 3, i+1, projection='3d') for i in range(3)]
@@ -6,11 +10,11 @@ def plot3d(df, colX:str, colY:str, colZ:str, title:str, predictions=None):
 
   for i,ax in enumerate(axes):
     if predictions is not None:
-      ax.scatter3D(df[colX], df[colY], predictions, color=palette[1], s=3)
-      ax.scatter3D(df[colX], df[colY], df[colZ], color=palette[0], s=1, 
+      ax.scatter3D(df[colX], df[colY], predictions, color=palette[1], s=5)
+      ax.scatter3D(df[colX], df[colY], df[colZ], color=palette[0], s=5,
                    alpha=0.35, depthshade=False)
     else:
-      ax.scatter3D(df[colX], df[colY], df[colZ], color=palette[0], s=1)
+      ax.scatter3D(df[colX], df[colY], df[colZ], color=palette[0], s=5)
 
     ax.set_xlabel(colX)
     ax.set_ylabel(colY)
