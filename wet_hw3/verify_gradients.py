@@ -17,7 +17,6 @@ def numerical_subgradient(w, b, X, y, delta=1e-4):
     return g_w, g_b
 
 
-
 def compare_gradients(X, y, deltas, C=1, REPEATS=10, figsize=(10, 6)):
     residual_means_w = []
     residual_means_b = []

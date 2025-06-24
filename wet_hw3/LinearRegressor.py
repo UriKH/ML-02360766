@@ -43,9 +43,9 @@ class LinearRegressor(BaseEstimator, RegressorMixin):
 
         # TODO: complete the loss calculation
         m = X.shape[0]
-        inner_loss = X @ w + b - y
-        l2_norm = np.linalg.norm(inner_loss, ord=2)
-        loss = (1. / m) * np.sum(inner_loss ** 2)
+        residual = np.dot(X, w) + float(b) - y
+        l2_norm = np.linalg.norm(residual.ravel())
+        loss = (1. / m) * l2_norm ** 2
         return loss
 
     @staticmethod
@@ -61,10 +61,10 @@ class LinearRegressor(BaseEstimator, RegressorMixin):
         """
         # TODO: calculate the analytical gradient w.r.t w and b
         m = X.shape[0]
-        inner_grad = X @ w + b - y
+        residual = np.dot(X, w) + float(b) - y
 
-        g_w = (2. / m) * (X.T @ inner_grad)
-        g_b = (2. / m) * np.sum(inner_grad)
+        g_w = (2. / m) * np.dot(X.T, residual.ravel())
+        g_b = (2. / m) * np.sum(residual.ravel())
         return g_w, g_b
 
     def fit_with_logs(self, X, y, max_iter: int = 1000, keep_losses: bool = True,
